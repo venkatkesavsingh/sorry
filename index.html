@@ -4,21 +4,22 @@
 <meta charset="UTF-8">
 <title>Sorry Everywhere</title>
 <style>
-    body {
+    html, body {
         margin: 0;
+        padding: 0;
         overflow: hidden;
         background-color: black;
-        height: 100vh;
-        width: 100vw;
+        height: 100%;
+        width: 100%;
         position: relative;
     }
     .sorry {
-        position: absolute;
+        position: fixed; /* stays relative to screen */
         color: red;
-        font-size: 5vw; /* Scales with screen width */
+        font-size: 6vw; /* responsive font size for mobile */
         font-family: Arial, sans-serif;
-        animation: fadeOut 5s forwards;
         font-weight: bold;
+        animation: fadeOut 5s forwards;
         user-select: none;
     }
     @keyframes fadeOut {
@@ -35,9 +36,9 @@ function createSorry() {
     msg.classList.add("sorry");
     msg.textContent = "Sorry";
 
-    // Random position
-    const x = Math.random() * (window.innerWidth - 100);
-    const y = Math.random() * (window.innerHeight - 50);
+    // Random position within screen boundaries
+    const x = Math.random() * (window.innerWidth - window.innerWidth * 0.2);
+    const y = Math.random() * (window.innerHeight - window.innerHeight * 0.1);
 
     msg.style.left = `${x}px`;
     msg.style.top = `${y}px`;
@@ -50,12 +51,11 @@ function createSorry() {
     }, 5000);
 }
 
-// Burst mode: more "Sorry" at a time
+// Burst effect: multiple messages at once
 let count = 0;
 const interval = setInterval(() => {
     if (count < 100) {
-        // Create 3-5 messages at once
-        let burst = Math.floor(Math.random() * 3) + 3;
+        const burst = Math.floor(Math.random() * 3) + 3; // 3-5 at once
         for (let i = 0; i < burst; i++) {
             createSorry();
         }
@@ -63,7 +63,7 @@ const interval = setInterval(() => {
     } else {
         clearInterval(interval);
     }
-}, 300); // every 0.3 seconds
+}, 300); // every 0.3s
 </script>
 
 </body>
