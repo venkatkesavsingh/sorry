@@ -15,9 +15,11 @@
     .sorry {
         position: absolute;
         color: red;
-        font-size: 24px;
+        font-size: 5vw; /* Scales with screen width */
         font-family: Arial, sans-serif;
         animation: fadeOut 5s forwards;
+        font-weight: bold;
+        user-select: none;
     }
     @keyframes fadeOut {
         0% { opacity: 1; }
@@ -33,9 +35,9 @@ function createSorry() {
     msg.classList.add("sorry");
     msg.textContent = "Sorry";
 
-    // Random position on screen
-    const x = Math.random() * window.innerWidth;
-    const y = Math.random() * window.innerHeight;
+    // Random position
+    const x = Math.random() * (window.innerWidth - 100);
+    const y = Math.random() * (window.innerHeight - 50);
 
     msg.style.left = `${x}px`;
     msg.style.top = `${y}px`;
@@ -48,16 +50,20 @@ function createSorry() {
     }, 5000);
 }
 
-// Show a new "Sorry" every 300ms until 100 times
+// Burst mode: more "Sorry" at a time
 let count = 0;
 const interval = setInterval(() => {
     if (count < 100) {
-        createSorry();
-        count++;
+        // Create 3-5 messages at once
+        let burst = Math.floor(Math.random() * 3) + 3;
+        for (let i = 0; i < burst; i++) {
+            createSorry();
+        }
+        count += burst;
     } else {
         clearInterval(interval);
     }
-}, 300);
+}, 300); // every 0.3 seconds
 </script>
 
 </body>
