@@ -6,18 +6,48 @@
     <style>
         body {
             background-color: black;
-            color: white;
+            color: red;
             font-family: Arial, sans-serif;
-            text-align: left;
             font-size: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: start;
+            padding-top: 2px;
+        }
+        .message {
+            margin: 2px 0;
+            padding: 2px 4px;
+            background-color: white;
+            border-radius: 10px;
+            max-width: 80%;
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
+    <div id="chat"></div>
+
     <script>
-        for (let i = 1; i <= 1000; i++) {
-            document.write("Sorry<br><br>");
+        let count = 0;
+        let chatBox = document.getElementById("chat");
+
+        function sendMessage() {
+            if (count < 100) {
+                let msg = document.createElement("div");
+                msg.classList.add("message");
+                msg.textContent = "Sorry";
+                chatBox.appendChild(msg);
+                count++;
+                setTimeout(sendMessage, 300); // Delay between messages
+            }
         }
+
+        sendMessage();
     </script>
 </body>
 </html>
