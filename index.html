@@ -15,11 +15,13 @@
     }
     .sorry {
         position: fixed;
-        color: white;
-        font-size: 6vw; /* responsive font size */
+        color: red;
+        font-size: 6vw; /* responsive for mobile */
         font-family: Arial, sans-serif;
+        font-weight: bold;
         animation: fadeOut 5s forwards;
         user-select: none;
+        white-space: nowrap;
     }
     @keyframes fadeOut {
         0% { opacity: 1; }
@@ -30,33 +32,55 @@
 <body>
 
 <script>
+let activeMessages = [];
+
+function isOverlapping(x, y) {
+    const minDistance = 80; // distance between messages in px
+    for (let msg of activeMessages) {
+        let dx = msg.x - x;
+        let dy = msg.y - y;
+        if (Math.sqrt(dx * dx + dy * dy) < minDistance) {
+            return true; // too close
+        }
+    }
+    return false;
+}
+
 function createSorry() {
+    let tries = 0;
+    let x, y;
+
+    // Find a position that does not overlap
+    do {
+        x = Math.random() * (window.innerWidth - window.innerWidth * 0.2);
+        y = Math.random() * (window.innerHeight - window.innerHeight * 0.1);
+        tries++;
+    } while (isOverlapping(x, y) && tries < 20);
+
     const msg = document.createElement("div");
     msg.classList.add("sorry");
     msg.textContent = "Sorry";
-
-    // Random position
-    const x = Math.random() * (window.innerWidth - window.innerWidth * 0.2);
-    const y = Math.random() * (window.innerHeight - window.innerHeight * 0.1);
-
     msg.style.left = `${x}px`;
     msg.style.top = `${y}px`;
 
     document.body.appendChild(msg);
 
-    // Remove after 5 seconds
+    activeMessages.push({ x, y });
+
+    // Remove after 5 seconds & remove from active list
     setTimeout(() => {
         msg.remove();
+        activeMessages = activeMessages.filter(m => m.x !== x || m.y !== y);
     }, 5000);
 }
 
 // Keep popping forever
 setInterval(() => {
-    const burst = Math.floor(Math.random() * 3) + 3; // 3–5 at a time
+    const burst = Math.floor(Math.random() * 3) + 3; // 3–5 messages at once
     for (let i = 0; i < burst; i++) {
         createSorry();
     }
-}, 300); // every 0.3 seconds
+}, 300);
 </script>
 
 </body>
